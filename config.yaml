@@ -1,0 +1,68 @@
+# ---------------------------------------------------------------------------
+# Watcher config. Edit this file, commit it, and the next run picks it up.
+# No API keys go in here - those live in GitHub repository secrets.
+# ---------------------------------------------------------------------------
+
+# Minimum minutes between repeat alerts for the same rule.
+# Without this, an "above 780" rule fires every single run while it's true.
+alert_cooldown_minutes: 240
+
+# How many recent transactions to pull per wallet each run.
+wallet_tx_limit: 25
+
+
+# ---------------------------------------------------------------------------
+# Price rules
+#
+# kind: equity  -> priced via Yahoo Finance, uses the ticker
+# kind: crypto  -> priced via CoinGecko, needs coingecko_id (not the ticker)
+#
+# rule types:
+#   pct_move  threshold: N   fires when today's move exceeds +/- N%
+#   above     price: N       fires while price is above N
+#   below     price: N       fires while price is below N
+# ---------------------------------------------------------------------------
+
+tickers:
+  - symbol: SPY
+    kind: equity
+    rules:
+      - type: pct_move
+        threshold: 1.5
+
+  - symbol: BTC
+    kind: crypto
+    coingecko_id: bitcoin
+    rules:
+      - type: pct_move
+        threshold: 4.0
+        cooldown_minutes: 360
+
+  # Add your own below. Delete the examples above if you don't want them.
+  #
+  # - symbol: QQQ
+  #   kind: equity
+  #   rules:
+  #     - type: below
+  #       price: 500
+
+
+# ---------------------------------------------------------------------------
+# Wallets to watch. Leave these empty until you have addresses worth tracking.
+#
+# solana: needs HELIUS_API_KEY. types filters Helius transaction types -
+#         SWAP is the interesting one; use [] to log everything.
+# evm:    needs ETHERSCAN_API_KEY. chain can be ethereum, base, arbitrum,
+#         or polygon. Logs ERC-20 token transfers in and out.
+# ---------------------------------------------------------------------------
+
+wallets:
+  solana: []
+    # - address: "PASTE_SOLANA_ADDRESS_HERE"
+    #   label: "whale-1"
+    #   types: ["SWAP"]
+
+  evm: []
+    # - address: "0xPASTE_ETHEREUM_ADDRESS_HERE"
+    #   label: "whale-2"
+    #   chain: ethereum

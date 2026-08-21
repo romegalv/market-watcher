@@ -1,2 +1,7 @@
 ts_utc,source,kind,asset,detail,price_at_signal,ref
 2026-08-21T17:15:57Z,price,pct_move,BTC,moved up 6.73% (threshold 4.0%),77535.000000,
+2026-08-21T18:21:32Z,price,pct_move,HOOD,moved up 13.90% (threshold 4.0%),108.471802,
+2026-08-21T18:21:32Z,price,pct_move,MRNA,moved up 7.59% (threshold 5.0%),139.490005,
+2026-08-21T18:21:32Z,price,pct_move,REMX,moved up 6.28% (threshold 4.0%),80.769997,
+2026-08-21T18:21:32Z,price,pct_move,USAR,moved up 12.13% (threshold 7.0%),19.275000,
+2026-08-21T18:21:32Z,price,pct_move,INFQ,moved up 11.13% (threshold 8.0%),13.795000,

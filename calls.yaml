@@ -1,0 +1,12 @@
+# Week's calls. Committed BEFORE Monday's open - the git timestamp is the proof.
+# Do not edit after Monday 9:30am ET. Start a new week instead.
+
+week_of: "2026-08-24"
+benchmark: SPY
+
+calls:
+  - ticker: EXAMPLE
+    direction: up          # up or down
+    confidence: medium     # low / medium / high
+    author: claude         # claude or you
+    reasoning: "Replace this whole block Sunday. Placeholder tickers are skipped."

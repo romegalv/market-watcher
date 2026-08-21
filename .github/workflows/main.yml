@@ -4,7 +4,7 @@ on:
   schedule:
     # Every 15 minutes. GitHub's scheduler is best-effort and often runs late,
     # sometimes by 10+ minutes. Fine for logging, not for anything time-critical.
-    - cron: "*/15 * * * *"
+    - cron: "*/5 * * * *"
   workflow_dispatch: {}   # lets you run it by hand from the Actions tab
 
 # Needed so the job can commit signals.csv and state.json back to the repo.

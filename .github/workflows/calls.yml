@@ -1,0 +1,48 @@
+name: calls
+
+on:
+  schedule:
+    # Every 30 min during US market hours (UTC). The script itself decides
+    # whether it's Monday-entry time or Friday-scoring time and no-ops otherwise,
+    # so extra runs are harmless.
+    - cron: "*/30 13-21 * * 1-5"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: calls
+  cancel-in-progress: false
+
+jobs:
+  calls:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run calls tracker
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: python calls.py
+
+      - name: Commit results
+        run: |
+          git config user.name "watcher-bot"
+          git config user.email "watcher-bot@users.noreply.github.com"
+          git add calls_results.csv calls_state.json 2>/dev/null || true
+          if git diff --staged --quiet; then
+            echo "nothing new to commit"
+          else
+            git commit -m "calls: $(date -u +%Y-%m-%dT%H:%MZ)"
+            git pull --rebase --autostash
+            git push
+          fi

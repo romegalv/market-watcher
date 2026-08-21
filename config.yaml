@@ -1,29 +1,78 @@
 # ---------------------------------------------------------------------------
-# Watcher config. Edit this file, commit it, and the next run picks it up.
-# No API keys go in here - those live in GitHub repository secrets.
+# Watcher config. Edit, commit, and the next run picks it up.
+# No API keys in here - those live in GitHub repository secrets.
 # ---------------------------------------------------------------------------
 
-# Minimum minutes between repeat alerts for the same rule.
-# Without this, an "above 780" rule fires every single run while it's true.
 alert_cooldown_minutes: 240
-
-# How many recent transactions to pull per wallet each run.
 wallet_tx_limit: 25
 
 
 # ---------------------------------------------------------------------------
 # Price rules
 #
-# kind: equity  -> priced via Yahoo Finance, uses the ticker
-# kind: crypto  -> priced via CoinGecko, needs coingecko_id (not the ticker)
-#
-# rule types:
-#   pct_move  threshold: N   fires when today's move exceeds +/- N%
-#   above     price: N       fires while price is above N
-#   below     price: N       fires while price is below N
+# Thresholds are set per-name by how much each one normally moves. A uniform
+# threshold would drown you in small-cap noise while missing real moves in the
+# large caps. Tune these after a week of watching - if a name alerts every day,
+# raise it; if it never alerts, lower it.
 # ---------------------------------------------------------------------------
 
 tickers:
+
+  # --- Large cap: a 3% day here is a real event -------------------------------
+
+  - symbol: GOOGL          # Alphabet Class A
+    kind: equity
+    rules:
+      - type: pct_move
+        threshold: 3.0
+
+  # --- Mid cap / high beta ----------------------------------------------------
+
+  - symbol: HOOD           # Robinhood Markets
+    kind: equity
+    rules:
+      - type: pct_move
+        threshold: 4.0
+
+  - symbol: MRNA           # Moderna
+    kind: equity
+    rules:
+      - type: pct_move
+        threshold: 5.0
+
+  - symbol: NBIS           # Nebius Group
+    kind: equity
+    rules:
+      - type: pct_move
+        threshold: 6.0
+
+  # --- Rare earth theme -------------------------------------------------------
+  # REMX is the sector ETF, USAR a single name inside that theme. They will
+  # often alert together - that is the theme moving, not two signals.
+
+  - symbol: REMX           # VanEck Rare Earth & Strategic Metals ETF
+    kind: equity
+    rules:
+      - type: pct_move
+        threshold: 4.0
+
+  - symbol: USAR           # USA Rare Earth
+    kind: equity
+    rules:
+      - type: pct_move
+        threshold: 7.0
+
+  # --- Speculative ------------------------------------------------------------
+
+  - symbol: INFQ           # Infleqtion
+    kind: equity
+    rules:
+      - type: pct_move
+        threshold: 8.0
+
+  # --- Market context ---------------------------------------------------------
+  # Keep SPY so you can tell "my stock moved" from "everything moved".
+
   - symbol: SPY
     kind: equity
     rules:
@@ -38,31 +87,11 @@ tickers:
         threshold: 4.0
         cooldown_minutes: 360
 
-  # Add your own below. Delete the examples above if you don't want them.
-  #
-  # - symbol: QQQ
-  #   kind: equity
-  #   rules:
-  #     - type: below
-  #       price: 500
-
 
 # ---------------------------------------------------------------------------
-# Wallets to watch. Leave these empty until you have addresses worth tracking.
-#
-# solana: needs HELIUS_API_KEY. types filters Helius transaction types -
-#         SWAP is the interesting one; use [] to log everything.
-# evm:    needs ETHERSCAN_API_KEY. chain can be ethereum, base, arbitrum,
-#         or polygon. Logs ERC-20 token transfers in and out.
+# Wallets - unused for now.
 # ---------------------------------------------------------------------------
 
 wallets:
   solana: []
-    # - address: "PASTE_SOLANA_ADDRESS_HERE"
-    #   label: "whale-1"
-    #   types: ["SWAP"]
-
   evm: []
-    # - address: "0xPASTE_ETHEREUM_ADDRESS_HERE"
-    #   label: "whale-2"
-    #   chain: ethereum

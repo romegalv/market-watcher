@@ -1,0 +1,50 @@
+name: watch
+
+on:
+  schedule:
+    # Every 15 minutes. GitHub's scheduler is best-effort and often runs late,
+    # sometimes by 10+ minutes. Fine for logging, not for anything time-critical.
+    - cron: "*/15 * * * *"
+  workflow_dispatch: {}   # lets you run it by hand from the Actions tab
+
+# Needed so the job can commit signals.csv and state.json back to the repo.
+permissions:
+  contents: write
+
+concurrency:
+  group: watcher
+  cancel-in-progress: false
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run watcher
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          HELIUS_API_KEY: ${{ secrets.HELIUS_API_KEY }}
+          ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
+        run: python watcher.py
+
+      - name: Commit log and state
+        run: |
+          git config user.name "watcher-bot"
+          git config user.email "watcher-bot@users.noreply.github.com"
+          git add signals.csv state.json 2>/dev/null || true
+          if git diff --staged --quiet; then
+            echo "nothing new to commit"
+          else
+            git commit -m "signals: $(date -u +%Y-%m-%dT%H:%MZ)"
+            git pull --rebase --autostash
+            git push
+          fi

@@ -7,5 +7,39 @@
     "REMX:0": "2026-08-22T19:03:56Z",
     "USAR:0": "2026-08-22T19:03:56Z"
   },
-  "seen_tx": {}
+  "seen_tx": {},
+  "volatility": {
+    "GOOGL": {
+      "avg_abs_move": 1.9751107301199444,
+      "computed": "2026-08-22"
+    },
+    "HOOD": {
+      "avg_abs_move": 3.314165965346838,
+      "computed": "2026-08-22"
+    },
+    "INFQ": {
+      "avg_abs_move": 5.176247016780293,
+      "computed": "2026-08-22"
+    },
+    "MRNA": {
+      "avg_abs_move": 9.504116195730637,
+      "computed": "2026-08-22"
+    },
+    "NBIS": {
+      "avg_abs_move": 7.688576779281198,
+      "computed": "2026-08-22"
+    },
+    "REMX": {
+      "avg_abs_move": 2.570704353067025,
+      "computed": "2026-08-22"
+    },
+    "SPY": {
+      "avg_abs_move": 0.5998092918504141,
+      "computed": "2026-08-22"
+    },
+    "USAR": {
+      "avg_abs_move": 4.880729310785048,
+      "computed": "2026-08-22"
+    }
+  }
 }

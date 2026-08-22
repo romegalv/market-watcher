@@ -1,83 +1,78 @@
 # ---------------------------------------------------------------------------
-# Watcher config. Edit, commit, and the next run picks it up.
-# No API keys in here - those live in GitHub repository secrets.
+# Watcher config.
+#
+# Rules now come in two flavours:
+#
+#   pct_move       threshold is a fixed % move. Simple, but you have to hand-
+#                  tune it per stock or you drown in small-cap noise.
+#
+#   relative_move  threshold is a MULTIPLE of that stock's own typical day
+#                  (mean absolute daily move over the last 30 sessions).
+#                  One setting works across every name. 2.5 means "today is
+#                  two and a half times a normal day for this stock."
+#
+# relative_move is the better default. It's the difference between "USAR moved
+# 7%" (so does it every week) and "GOOGL moved 3%, which is 2.8x normal"
+# (something actually happened).
+#
+# Crypto has no multiple - Yahoo doesn't carry it under these symbols - so BTC
+# still uses pct_move.
 # ---------------------------------------------------------------------------
 
 alert_cooldown_minutes: 240
 wallet_tx_limit: 25
 
-
-# ---------------------------------------------------------------------------
-# Price rules
-#
-# Thresholds are set per-name by how much each one normally moves. A uniform
-# threshold would drown you in small-cap noise while missing real moves in the
-# large caps. Tune these after a week of watching - if a name alerts every day,
-# raise it; if it never alerts, lower it.
-# ---------------------------------------------------------------------------
-
 tickers:
-
-  # --- Large cap: a 3% day here is a real event -------------------------------
 
   - symbol: GOOGL          # Alphabet Class A
     kind: equity
     rules:
-      - type: pct_move
-        threshold: 3.0
-
-  # --- Mid cap / high beta ----------------------------------------------------
+      - type: relative_move
+        threshold: 2.5
 
   - symbol: HOOD           # Robinhood Markets
     kind: equity
     rules:
-      - type: pct_move
-        threshold: 4.0
+      - type: relative_move
+        threshold: 2.5
 
   - symbol: MRNA           # Moderna
     kind: equity
     rules:
-      - type: pct_move
-        threshold: 5.0
+      - type: relative_move
+        threshold: 2.5
 
   - symbol: NBIS           # Nebius Group
     kind: equity
     rules:
-      - type: pct_move
-        threshold: 6.0
-
-  # --- Rare earth theme -------------------------------------------------------
-  # REMX is the sector ETF, USAR a single name inside that theme. They will
-  # often alert together - that is the theme moving, not two signals.
+      - type: relative_move
+        threshold: 2.5
 
   - symbol: REMX           # VanEck Rare Earth & Strategic Metals ETF
     kind: equity
     rules:
-      - type: pct_move
-        threshold: 4.0
+      - type: relative_move
+        threshold: 2.5
 
   - symbol: USAR           # USA Rare Earth
     kind: equity
     rules:
-      - type: pct_move
-        threshold: 7.0
-
-  # --- Speculative ------------------------------------------------------------
+      - type: relative_move
+        threshold: 2.5
 
   - symbol: INFQ           # Infleqtion
     kind: equity
     rules:
-      - type: pct_move
-        threshold: 8.0
+      - type: relative_move
+        threshold: 2.5
 
-  # --- Market context ---------------------------------------------------------
-  # Keep SPY so you can tell "my stock moved" from "everything moved".
-
+  # Market context. Lower bar - you want to know when the whole market moves,
+  # because that reframes everything above it.
   - symbol: SPY
     kind: equity
     rules:
-      - type: pct_move
-        threshold: 1.5
+      - type: relative_move
+        threshold: 2.0
 
   - symbol: BTC
     kind: crypto
@@ -86,11 +81,6 @@ tickers:
       - type: pct_move
         threshold: 4.0
         cooldown_minutes: 360
-
-
-# ---------------------------------------------------------------------------
-# Wallets - unused for now.
-# ---------------------------------------------------------------------------
 
 wallets:
   solana: []

@@ -139,6 +139,40 @@ def crypto_price(coingecko_id: str) -> tuple[float, float] | None:
         return None
 
 
+def typical_move(symbol: str, state: dict) -> float | None:
+    """Mean absolute daily % change over the last ~30 sessions.
+
+    This is what makes a raw percentage interpretable. A 5% day in GOOGL is
+    extraordinary; a 5% day in USAR is Tuesday. Dividing the move by this
+    number tells you which one you're looking at.
+
+    Cached per calendar day - pulling two months of history every five minutes
+    would be wasteful and would trip Yahoo's rate limits.
+    """
+    cache = state.setdefault("volatility", {})
+    today = now_utc().strftime("%Y-%m-%d")
+    hit = cache.get(symbol)
+    if hit and hit.get("computed") == today:
+        return hit.get("avg_abs_move")
+
+    try:
+        import yfinance as yf
+
+        closes = yf.Ticker(symbol).history(period="2mo", interval="1d")["Close"].dropna()
+        if len(closes) < 10:
+            print(f"  ! not enough history for {symbol} to compute typical move")
+            return None
+        avg = float((closes.pct_change().dropna().abs() * 100).tail(30).mean())
+        if avg <= 0:
+            return None
+        cache[symbol] = {"avg_abs_move": avg, "computed": today}
+        print(f"  . {symbol} typical day: {avg:.2f}%")
+        return avg
+    except Exception as exc:  # noqa: BLE001
+        print(f"  ! typical move failed for {symbol}: {exc}")
+        return None
+
+
 def check_price_rules(config: dict, state: dict) -> list[dict]:
     signals: list[dict] = []
     default_cooldown = int(config.get("alert_cooldown_minutes", 240))
@@ -156,7 +190,12 @@ def check_price_rules(config: dict, state: dict) -> list[dict]:
             continue
         last, prev = quote
         pct = (last - prev) / prev * 100 if prev else 0.0
-        print(f"  {symbol}: {last:.4f} ({pct:+.2f}%)")
+
+        # Crypto isn't on Yahoo under this symbol, so skip the multiple there.
+        typ = typical_move(symbol, state) if kind != "crypto" else None
+        mult = abs(pct) / typ if typ else None
+        mult_txt = f", {mult:.1f}x its typical day" if mult else ""
+        print(f"  {symbol}: {last:.4f} ({pct:+.2f}%{mult_txt})")
 
         for idx, rule in enumerate(entry.get("rules") or []):
             rtype = rule.get("type")
@@ -170,17 +209,28 @@ def check_price_rules(config: dict, state: dict) -> list[dict]:
                 if abs(pct) >= threshold:
                     hit = True
                     direction = "up" if pct > 0 else "down"
-                    detail = f"moved {direction} {abs(pct):.2f}% (threshold {threshold}%)"
+                    detail = f"moved {direction} {abs(pct):.2f}%{mult_txt} (threshold {threshold}%)"
+            elif rtype == "relative_move":
+                # Threshold is in multiples of the stock's own typical day, so
+                # one setting works across names with very different volatility.
+                threshold = float(rule["threshold"])
+                if mult is not None and mult >= threshold:
+                    hit = True
+                    direction = "up" if pct > 0 else "down"
+                    detail = (
+                        f"moved {direction} {abs(pct):.2f}%, {mult:.1f}x its typical "
+                        f"day of {typ:.2f}% (threshold {threshold}x)"
+                    )
             elif rtype == "above":
                 target = float(rule["price"])
                 if last > target:
                     hit = True
-                    detail = f"trading above {target}"
+                    detail = f"trading above {target} (now {last:.2f}{mult_txt})"
             elif rtype == "below":
                 target = float(rule["price"])
                 if last < target:
                     hit = True
-                    detail = f"trading below {target}"
+                    detail = f"trading below {target} (now {last:.2f}{mult_txt})"
             else:
                 print(f"  ! unknown rule type {rtype!r} on {symbol}")
                 continue

@@ -372,7 +372,13 @@ def post_discord(signals: list[dict]) -> None:
 
     lines = [f"**{len(signals)} signal(s)** - {iso(now_utc())}", ""]
     for sig in signals[:15]:
-        line = f"`{sanitize(sig['source'])}` {sanitize(sig['detail'])}"
+        # Price signals carry the ticker in 'asset'; wallet signals carry the
+        # wallet label in 'source'. Show whichever actually identifies the thing.
+        if sig.get("source") == "price":
+            head = f"**{sanitize(sig.get('asset') or '?')}**"
+        else:
+            head = f"`{sanitize(sig['source'])}`"
+        line = f"{head} {sanitize(sig['detail'])}"
         if sig.get("price_at_signal"):
             line += f"  (px {sig['price_at_signal']})"
         if sig.get("ref"):

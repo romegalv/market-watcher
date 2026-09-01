@@ -84,4 +84,4 @@ feeds:
 
 # SEC blocks requests without a real contact string. Put your own email here
 # before enabling the sec-8k feed - a fake one risks getting your IP blocked.
-user_agent: "market-watcher/1.0 (your-email@example.com)"
+user_agent: "market-watcher/1.0 (romeogalvan858@gmail.com)"

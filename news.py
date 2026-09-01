@@ -53,7 +53,7 @@ STATE_PATH = ROOT / "news_state.json"
 LOG_PATH = ROOT / "news_log.csv"
 
 ANTHROPIC_KEY = os.environ.get("ANTHROPIC_API_KEY", "").strip()
-MODEL = "claude-haiku-4-5"
+MODEL = "claude-haiku-4-5-20251001"
 
 LOG_FIELDS = [
     "ts_utc", "ticker", "score", "direction", "source", "price_at_scan",
@@ -142,8 +142,12 @@ def gather(feeds_cfg: dict, tickers: list[str], seen: set[str]) -> list[dict]:
         )
 
         found = 0
+        per_feed_cap = int(feed.get("max_items", 6 if feed.get("per_ticker") else 40))
         for url, hint in urls:
+            kept_here = 0
             for item in fetch_feed(url, agent):
+                if kept_here >= per_feed_cap:
+                    break
                 if item["link"] in seen:
                     continue
                 seen.add(item["link"])
@@ -157,6 +161,7 @@ def gather(feeds_cfg: dict, tickers: list[str], seen: set[str]) -> list[dict]:
                     "hint": hint,
                 })
                 found += 1
+                kept_here += 1
         print(f"  {label}: {found} new")
 
     # Upstream sources first, so the per-run budget goes to filings and wires
@@ -192,7 +197,12 @@ def score(headline: str, hint: str | None) -> dict | None:
             },
             timeout=30,
         )
-        resp.raise_for_status()
+        if resp.status_code != 200:
+            # Anthropic returns a JSON body explaining exactly what was wrong.
+            # raise_for_status() would throw that away, which is how a 400 turns
+            # into an unhelpful mystery.
+            detail = resp.text[:400]
+            raise RuntimeError(f"HTTP {resp.status_code}: {detail}")
         text = "".join(
             b.get("text", "") for b in resp.json().get("content", []) if b.get("type") == "text"
         )
@@ -361,12 +371,19 @@ def main() -> None:
     budget = int(feeds_cfg.get("max_scored_per_run", 12))
     scored: list[dict] = []
 
+    consecutive_failures = 0
     for cand in candidates:
         if budget <= 0:
             break
+        if consecutive_failures >= 3:
+            print("  ! 3 scoring calls failed in a row - stopping to avoid "
+                  "burning credits on a broken request. Fix the error above.")
+            break
         result = score(cand["title"], cand["hint"])
         if result is None:
+            consecutive_failures += 1
             continue
+        consecutive_failures = 0
         budget -= 1
         if not result["ticker"]:
             print(f"    [ -- ] no ticker: {cand['title'][:55]}")

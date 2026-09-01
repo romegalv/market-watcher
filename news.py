@@ -55,6 +55,11 @@ LOG_PATH = ROOT / "news_log.csv"
 ANTHROPIC_KEY = os.environ.get("ANTHROPIC_API_KEY", "").strip()
 MODEL = "claude-haiku-4-5-20251001"
 
+# Workspace-scoped ("identity-linked") API keys must name the workspace the
+# request acts in. Keys created at the default org level don't need this, so
+# leave the secret unset if yours works without it.
+WORKSPACE_ID = os.environ.get("ANTHROPIC_WORKSPACE_ID", "").strip()
+
 LOG_FIELDS = [
     "ts_utc", "ticker", "score", "direction", "source", "price_at_scan",
     "price_1h", "move_1h_pct", "price_24h", "move_24h_pct",
@@ -174,6 +179,17 @@ def gather(feeds_cfg: dict, tickers: list[str], seen: set[str]) -> list[dict]:
 # scoring
 # --------------------------------------------------------------------------
 
+def _headers() -> dict[str, str]:
+    headers = {
+        "x-api-key": ANTHROPIC_KEY,
+        "anthropic-version": "2023-06-01",
+        "content-type": "application/json",
+    }
+    if WORKSPACE_ID:
+        headers["anthropic-workspace-id"] = WORKSPACE_ID
+    return headers
+
+
 def score(headline: str, hint: str | None) -> dict | None:
     if not ANTHROPIC_KEY:
         print("  ! ANTHROPIC_API_KEY not set - cannot score")
@@ -184,11 +200,7 @@ def score(headline: str, hint: str | None) -> dict | None:
     try:
         resp = requests.post(
             "https://api.anthropic.com/v1/messages",
-            headers={
-                "x-api-key": ANTHROPIC_KEY,
-                "anthropic-version": "2023-06-01",
-                "content-type": "application/json",
-            },
+            headers=_headers(),
             json={
                 "model": MODEL,
                 "max_tokens": 200,
@@ -329,6 +341,9 @@ def preflight() -> bool:
         problems.append("ANTHROPIC_API_KEY secret is not set - feeds will be read but nothing scored")
     if not DISCORD_WEBHOOK:
         problems.append("DISCORD_WEBHOOK_URL secret is not set - results will print here only")
+    if ANTHROPIC_KEY and not WORKSPACE_ID:
+        print("  note: ANTHROPIC_WORKSPACE_ID not set. Only needed if your API key "
+              "is workspace-scoped; the error message will say so if it is.")
 
     if problems:
         print("=" * 60)

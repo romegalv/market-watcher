@@ -14,8 +14,9 @@ If they don't correlate, the number is decoration - and you'll know cheaply.
 Cannot trade. No brokerage credentials anywhere in this program.
 
 Environment:
-    DISCORD_WEBHOOK_URL   required
-    ANTHROPIC_API_KEY     required for scoring
+    DISCORD_WEBHOOK_URL      required
+    ANTHROPIC_API_KEY        required for scoring
+    ANTHROPIC_WORKSPACE_ID   required if your API key is workspace-scoped
 """
 
 from __future__ import annotations

@@ -14,9 +14,8 @@ If they don't correlate, the number is decoration - and you'll know cheaply.
 Cannot trade. No brokerage credentials anywhere in this program.
 
 Environment:
-    DISCORD_WEBHOOK_URL      required
-    ANTHROPIC_API_KEY        required for scoring
-    ANTHROPIC_WORKSPACE_ID   required if your API key is workspace-scoped
+    DISCORD_WEBHOOK_URL   required
+    ANTHROPIC_API_KEY     required for scoring
 """
 
 from __future__ import annotations
@@ -25,6 +24,7 @@ import csv
 import json
 import os
 import re
+import time
 import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -132,6 +132,63 @@ def fetch_feed(url: str, agent: str) -> list[dict]:
         return []
 
 
+
+# --------------------------------------------------------------------------
+# 8-K item codes
+#
+# An 8-K RSS title is just "8-K - COMPANY (CIK) (Filer)" - it says a filing
+# happened, not what happened. The Item number is the actual content, and it
+# lives on the filing index page rather than in the feed. Fetching it turns a
+# meaningless notification into a real signal.
+# --------------------------------------------------------------------------
+
+ITEM_LABELS = {
+    "1.01": "entry into material definitive agreement",
+    "1.02": "termination of material definitive agreement",
+    "1.03": "BANKRUPTCY OR RECEIVERSHIP",
+    "1.05": "material cybersecurity incident",
+    "2.01": "completion of acquisition or disposition",
+    "2.02": "results of operations (earnings)",
+    "2.03": "creation of direct financial obligation",
+    "2.04": "triggering event accelerating an obligation",
+    "2.05": "costs associated with exit or disposal",
+    "2.06": "MATERIAL IMPAIRMENT",
+    "3.01": "NOTICE OF DELISTING or failure to satisfy listing rule",
+    "3.02": "unregistered sale of equity securities (dilution)",
+    "3.03": "material modification to security holder rights",
+    "4.01": "CHANGE OF AUDITOR",
+    "4.02": "NON-RELIANCE ON PRIOR FINANCIALS (restatement)",
+    "5.01": "change in control of registrant",
+    "5.02": "departure or election of directors or officers",
+    "5.03": "amendment to articles or bylaws",
+    "7.01": "Regulation FD disclosure",
+    "8.01": "other events",
+    "9.01": "financial statements and exhibits",
+}
+
+# Items rarely worth paying to score. 7.01/8.01/9.01 are catch-alls and
+# housekeeping; a filing with only these is almost always noise.
+LOW_VALUE_ITEMS = {"7.01", "8.01", "9.01", "5.03"}
+
+
+def fetch_filing_items(index_url: str, agent: str) -> list[str]:
+    """Pull the Item codes off an EDGAR filing index page."""
+    try:
+        resp = requests.get(index_url, timeout=HTTP_TIMEOUT, headers={"User-Agent": agent})
+        resp.raise_for_status()
+        found = re.findall(r"Item\s+(\d+\.\d{2})", resp.text)
+        # Preserve order, drop duplicates.
+        return list(dict.fromkeys(found))
+    except Exception as exc:  # noqa: BLE001
+        print(f"      ! item lookup failed: {exc}")
+        return []
+
+
+def describe_items(items: list[str]) -> str:
+    parts = [f"Item {i} ({ITEM_LABELS.get(i, 'unspecified')})" for i in items]
+    return "; ".join(parts)
+
+
 def gather(feeds_cfg: dict, tickers: list[str], seen: set[str]) -> list[dict]:
     agent = feeds_cfg.get("user_agent", "market-watcher/1.0")
     noise = [n.lower() for n in (feeds_cfg.get("noise_filters") or [])]
@@ -148,6 +205,8 @@ def gather(feeds_cfg: dict, tickers: list[str], seen: set[str]) -> list[dict]:
         )
 
         found = 0
+        enriched = 0
+        enrich_cap = int(feed.get("enrich_cap", 25))
         per_feed_cap = int(feed.get("max_items", 6 if feed.get("per_ticker") else 40))
         for url, hint in urls:
             kept_here = 0
@@ -159,8 +218,23 @@ def gather(feeds_cfg: dict, tickers: list[str], seen: set[str]) -> list[dict]:
                 seen.add(item["link"])
                 if any(n in item["title"].lower() for n in noise):
                     continue
+                title = item["title"]
+                if feed.get("fetch_items") and enriched < enrich_cap:
+                    codes = fetch_filing_items(item["link"], agent)
+                    enriched += 1
+                    time.sleep(0.15)   # SEC asks for under 10 requests/second
+                    if codes:
+                        if all(c in LOW_VALUE_ITEMS for c in codes):
+                            print(f"    . skipped {','.join(codes)} (housekeeping only)")
+                            continue
+                        title = f"{title} | {describe_items(codes)}"
+                    else:
+                        # No items readable - the bare title is worthless to
+                        # score, so don't spend a credit on it.
+                        continue
+
                 collected.append({
-                    "title": item["title"],
+                    "title": title,
                     "link": item["link"],
                     "source": label,
                     "weight": int(feed.get("weight", 1)),

@@ -10,7 +10,7 @@
 # ---------------------------------------------------------------------------
 
 # Headlines scored per run. Each one is a model call, so this is your cost dial.
-max_scored_per_run: 12
+max_scored_per_run: 6
 
 # Only headlines at or above this score reach Discord. Everything is logged.
 post_threshold: 60
@@ -42,6 +42,11 @@ feeds:
     url: "https://www.sec.gov/cgi-bin/browse-edgar?action=getcurrent&type=8-K&company=&dateb=&owner=include&count=40&output=atom"
     weight: 3
     enabled: true
+    # Fetch each filing's index page to read its Item codes. Without this the
+    # headline is just "8-K - COMPANY (CIK)", which carries no information and
+    # scores 5-15 every time. Costs one extra request per filing.
+    fetch_items: true
+    enrich_cap: 20
 
   # --- Wires: company announcements at the source -----------------------------
 
@@ -84,4 +89,4 @@ feeds:
 
 # SEC blocks requests without a real contact string. Put your own email here
 # before enabling the sec-8k feed - a fake one risks getting your IP blocked.
-user_agent: "market-watcher/1.0 (romeogalvan858@gmail.com)"
+user_agent: "market-watcher/1.0 (your-email@example.com)"

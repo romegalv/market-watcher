@@ -1,0 +1,115 @@
+
+/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+News workflow · YML
+name: news
+ 
+on:
+  schedule:
+    # Every 10 minutes during US market hours plus the pre-market window,
+    # weekdays. Filings and press releases cluster before the open and after
+    # the close, so the wide window is deliberate.
+    - cron: "*/10 11-22 * * 1-5"
+  workflow_dispatch: {}
+ 
+permissions:
+  contents: write
+ 
+concurrency:
+  group: news
+  cancel-in-progress: false
+ 
+jobs:
+  news:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+ 
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+ 
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+ 
+      - name: Run news scanner
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python news.py
+ 
+      - name: Commit log and state
+        run: |
+          git config user.name "watcher-bot"
+          git config user.email "watcher-bot@users.noreply.github.com"
+          git add news_log.csv news_state.json 2>/dev/null || true
+          if git diff --staged --quiet; then
+            echo "nothing new to commit"
+          else
+            git commit -m "news: $(date -u +%Y-%m-%dT%H:%MZ)"
+            git pull --rebase --autostash
+            git push
+          fi
+ 

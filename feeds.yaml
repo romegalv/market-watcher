@@ -1,0 +1,87 @@
+# ---------------------------------------------------------------------------
+# News sources, in rough order of how far upstream they sit.
+#
+# The chain runs: company files/announces -> wire carries it -> journalists
+# write it up -> aggregators surface it. Each hop costs minutes. Feeds nearer
+# the top of this file are nearer the top of that chain.
+#
+# Set enabled: false on anything too noisy. Add your own - any RSS or Atom
+# feed works. Broken feeds are logged and skipped, never fatal.
+# ---------------------------------------------------------------------------
+
+# Headlines scored per run. Each one is a model call, so this is your cost dial.
+max_scored_per_run: 12
+
+# Only headlines at or above this score reach Discord. Everything is logged.
+post_threshold: 60
+
+# Skip anything whose headline matches these - pure noise, not worth paying to
+# score. Case-insensitive substring match.
+noise_filters:
+  - "shares of"
+  - "what you need to know"
+  - "here's why"
+  - "3 reasons"
+  - "better buy"
+  - "motley fool"
+  - "zacks rank"
+  - "price target"
+  - "analyst"
+  - "should you buy"
+  - "stocks to watch"
+  - "market wrap"
+  - "dividend"
+
+feeds:
+
+  # --- Primary sources: the filings themselves --------------------------------
+  # 8-K is the "something material happened" form. This is upstream of all
+  # journalism. SEC requires a descriptive User-Agent (set below).
+
+  - label: "sec-8k"
+    url: "https://www.sec.gov/cgi-bin/browse-edgar?action=getcurrent&type=8-K&company=&dateb=&owner=include&count=40&output=atom"
+    weight: 3
+    enabled: true
+
+  # --- Wires: company announcements at the source -----------------------------
+
+  - label: "globenewswire"
+    url: "https://www.globenewswire.com/RssFeed/orgclass/1/feedTitle/GlobeNewswire%20-%20News%20about%20Public%20Companies"
+    weight: 3
+    enabled: true
+
+  - label: "businesswire"
+    url: "https://feed.businesswire.com/rss/home/?rss=G1QFDERJXkJeEFpRVQ=="
+    weight: 3
+    enabled: true
+
+  - label: "prnewswire"
+    url: "https://www.prnewswire.com/rss/news-releases-list.rss"
+    weight: 2
+    enabled: true
+
+  # --- Journalism: slower, but adds context a filing doesn't carry ------------
+
+  - label: "cnbc-markets"
+    url: "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=15839069"
+    weight: 1
+    enabled: true
+
+  - label: "cnbc-top"
+    url: "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=100003114"
+    weight: 1
+    enabled: true
+
+  # --- Per-ticker: guaranteed relevant to names you already hold --------------
+  # {ticker} is substituted for each equity symbol in config.yaml.
+
+  - label: "yahoo-ticker"
+    url: "https://feeds.finance.yahoo.com/rss/2.0/headline?s={ticker}&region=US&lang=en-US"
+    per_ticker: true
+    weight: 2
+    enabled: true
+
+
+# SEC blocks requests without a real contact string. Put your own email here
+# before enabling the sec-8k feed - a fake one risks getting your IP blocked.
+user_agent: "market-watcher/1.0 (your-email@example.com)"

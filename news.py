@@ -189,6 +189,57 @@ def describe_items(items: list[str]) -> str:
     return "; ".join(parts)
 
 
+
+# --------------------------------------------------------------------------
+# CIK -> ticker
+#
+# SEC filing titles carry the company's CIK number, e.g.
+#   8-K - DIGI INTERNATIONAL INC (0000854775) (Filer)
+# Asking a language model to recall the ticker from a company name is both
+# unreliable and something you pay for. EDGAR publishes the authoritative
+# mapping for free, so look it up instead. Cached to disk after first fetch.
+# --------------------------------------------------------------------------
+
+CIK_MAP_PATH = ROOT / "cik_map.json"
+_cik_cache: dict[str, str] | None = None
+
+
+def cik_to_ticker(cik: str, agent: str) -> str | None:
+    global _cik_cache
+    if _cik_cache is None:
+        if CIK_MAP_PATH.exists():
+            try:
+                _cik_cache = json.loads(CIK_MAP_PATH.read_text())
+                print(f"  . CIK map loaded ({len(_cik_cache)} companies)")
+            except (json.JSONDecodeError, OSError):
+                _cik_cache = None
+        if _cik_cache is None:
+            try:
+                resp = requests.get(
+                    "https://www.sec.gov/files/company_tickers.json",
+                    timeout=HTTP_TIMEOUT, headers={"User-Agent": agent},
+                )
+                resp.raise_for_status()
+                # Shape: {"0": {"cik_str": 320193, "ticker": "AAPL", ...}, ...}
+                _cik_cache = {
+                    str(row["cik_str"]).zfill(10): row["ticker"]
+                    for row in resp.json().values()
+                    if row.get("ticker")
+                }
+                CIK_MAP_PATH.write_text(json.dumps(_cik_cache))
+                print(f"  . CIK map downloaded ({len(_cik_cache)} companies)")
+            except Exception as exc:  # noqa: BLE001
+                print(f"  ! CIK map fetch failed: {exc}")
+                _cik_cache = {}
+    return _cik_cache.get(str(cik).zfill(10))
+
+
+def extract_cik(title: str) -> str | None:
+    """Pull the 10-digit CIK out of an EDGAR feed title."""
+    match = re.search(r"\((\d{10})\)", title)
+    return match.group(1) if match else None
+
+
 def gather(feeds_cfg: dict, tickers: list[str], seen: set[str]) -> list[dict]:
     agent = feeds_cfg.get("user_agent", "market-watcher/1.0")
     noise = [n.lower() for n in (feeds_cfg.get("noise_filters") or [])]
@@ -219,6 +270,16 @@ def gather(feeds_cfg: dict, tickers: list[str], seen: set[str]) -> list[dict]:
                 if any(n in item["title"].lower() for n in noise):
                     continue
                 title = item["title"]
+                resolved = None
+                if feed.get("fetch_items"):
+                    cik = extract_cik(title)
+                    if cik:
+                        resolved = cik_to_ticker(cik, agent)
+                        if not resolved:
+                            # No listed ticker for this CIK - a private filer,
+                            # a fund, or a SPAC shell. Nothing to trade, so
+                            # don't pay to score it.
+                            continue
                 if feed.get("fetch_items") and enriched < enrich_cap:
                     codes = fetch_filing_items(item["link"], agent)
                     enriched += 1
@@ -239,15 +300,29 @@ def gather(feeds_cfg: dict, tickers: list[str], seen: set[str]) -> list[dict]:
                     "source": label,
                     "weight": int(feed.get("weight", 1)),
                     "hint": hint,
+                    "known_ticker": resolved,
                 })
                 found += 1
                 kept_here += 1
         print(f"  {label}: {found} new")
 
-    # Upstream sources first, so the per-run budget goes to filings and wires
-    # before it goes to commentary.
-    collected.sort(key=lambda i: -i["weight"])
-    return collected
+    # Interleave by source rather than sorting purely by weight.
+    #
+    # A straight weight sort starves everything below the top tier: 35 SEC
+    # filings would consume a budget of 6 before a single wire release was
+    # seen, and the wires are where headlines with actual sentences live.
+    # Round-robin gives every source a turn, still in weight order.
+    by_source: dict[str, list[dict]] = {}
+    for item in collected:
+        by_source.setdefault(item["source"], []).append(item)
+
+    queues = sorted(by_source.values(), key=lambda q: -q[0]["weight"])
+    interleaved: list[dict] = []
+    while any(queues):
+        for queue in queues:
+            if queue:
+                interleaved.append(queue.pop(0))
+    return interleaved
 
 
 # --------------------------------------------------------------------------
@@ -265,12 +340,14 @@ def _headers() -> dict[str, str]:
     return headers
 
 
-def score(headline: str, hint: str | None) -> dict | None:
+def score(headline: str, hint: str | None, known_ticker: str | None = None) -> dict | None:
     if not ANTHROPIC_KEY:
         print("  ! ANTHROPIC_API_KEY not set - cannot score")
         return None
     prompt = f"Headline: {headline}"
-    if hint:
+    if known_ticker:
+        prompt += f"\nThe ticker is {known_ticker} (resolved from the SEC filing, authoritative)."
+    elif hint:
         prompt += f"\n(This came from a feed specific to {hint}.)"
     try:
         resp = requests.post(
@@ -299,6 +376,9 @@ def score(headline: str, hint: str | None) -> dict | None:
         parsed = json.loads(match.group(0))
         ticker = parsed.get("ticker")
         ticker = str(ticker).upper().strip() if ticker else None
+        # A ticker resolved from the CIK beats anything the model produced.
+        if known_ticker:
+            ticker = known_ticker
         if ticker and not re.fullmatch(r"[A-Z.\-]{1,6}", ticker):
             ticker = None
         return {
@@ -469,7 +549,7 @@ def main() -> None:
             print("  ! 3 scoring calls failed in a row - stopping to avoid "
                   "burning credits on a broken request. Fix the error above.")
             break
-        result = score(cand["title"], cand["hint"])
+        result = score(cand["title"], cand["hint"], cand.get("known_ticker"))
         if result is None:
             consecutive_failures += 1
             continue

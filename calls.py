@@ -196,7 +196,7 @@ def main() -> None:
     print(f"ET now: {now:%Y-%m-%d %H:%M %a} | week_of: {week}")
 
     # Monday, any time from 9:35am ET onward: lock in entries (once).
-    if now.weekday() == 0 and minutes >= 9 * 60 + 35 and record is None:
+      if now.weekday() <= 4 and minutes >= 9 * 60 + 35 and record is None:
         print("-> recording entries")
         record_entries(config, state, week)
         save_state(state)

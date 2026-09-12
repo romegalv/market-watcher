@@ -10,36 +10,36 @@
   "seen_tx": {},
   "volatility": {
     "GOOGL": {
-      "avg_abs_move": 1.4521580107325902,
-      "computed": "2026-09-11"
+      "avg_abs_move": 1.4707861513946734,
+      "computed": "2026-09-12"
     },
     "HOOD": {
-      "avg_abs_move": 3.561864792223045,
-      "computed": "2026-09-11"
+      "avg_abs_move": 3.4154586900263353,
+      "computed": "2026-09-12"
     },
     "INFQ": {
-      "avg_abs_move": 4.671080537680539,
-      "computed": "2026-09-11"
+      "avg_abs_move": 4.098988707377108,
+      "computed": "2026-09-12"
     },
     "MRNA": {
-      "avg_abs_move": 10.386323313478634,
-      "computed": "2026-09-11"
+      "avg_abs_move": 10.302107503734257,
+      "computed": "2026-09-12"
     },
     "NBIS": {
-      "avg_abs_move": 6.5388626930548615,
-      "computed": "2026-09-11"
+      "avg_abs_move": 5.434601154815954,
+      "computed": "2026-09-12"
     },
     "REMX": {
-      "avg_abs_move": 1.7902982034525,
-      "computed": "2026-09-11"
+      "avg_abs_move": 1.875429418783556,
+      "computed": "2026-09-12"
     },
     "SPY": {
-      "avg_abs_move": 0.5876649779265278,
-      "computed": "2026-09-11"
+      "avg_abs_move": 0.5288824868661143,
+      "computed": "2026-09-12"
     },
     "USAR": {
-      "avg_abs_move": 4.169181129270029,
-      "computed": "2026-09-11"
+      "avg_abs_move": 3.830561196960861,
+      "computed": "2026-09-12"
     }
   }
 }

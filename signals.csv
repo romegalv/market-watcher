@@ -64,3 +64,5 @@ ts_utc,source,kind,asset,detail,price_at_signal,ref
 2026-09-18T18:28:56Z,price,relative_move,HOOD,"moved up 9.45%, 2.7x its typical day of 3.50% (threshold 2.5x)",119.355003,
 2026-09-18T23:15:52Z,price,relative_move,HOOD,"moved up 9.88%, 2.8x its typical day of 3.50% (threshold 2.5x)",119.820000,
 2026-09-18T23:15:52Z,price,pct_move,BTC,moved up 6.14% (threshold 4.0%),81127.000000,
+2026-09-19T05:54:49Z,price,relative_move,HOOD,"moved up 9.88%, 2.7x its typical day of 3.65% (threshold 2.5x)",119.820000,
+2026-09-19T05:54:49Z,price,pct_move,BTC,moved up 4.67% (threshold 4.0%),81034.000000,

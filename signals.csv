@@ -80,3 +80,4 @@ ts_utc,source,kind,asset,detail,price_at_signal,ref
 2026-09-22T01:08:32Z,price,relative_move,SPY,"moved up 1.38%, 2.9x its typical day of 0.47% (threshold 2.0x)",773.500000,
 2026-09-22T06:09:25Z,price,relative_move,SPY,"moved up 1.38%, 2.9x its typical day of 0.47% (threshold 2.0x)",773.500000,
 2026-09-22T06:09:25Z,price,pct_move,BTC,moved up 4.56% (threshold 4.0%),85315.000000,
+2026-09-23T14:25:53Z,price,relative_move,GOOGL,"moved down 3.12%, 2.8x its typical day of 1.12% (threshold 2.5x)",340.907990,

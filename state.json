@@ -13,35 +13,35 @@
   "volatility": {
     "GOOGL": {
       "avg_abs_move": 1.1573083802587083,
-      "computed": "2026-09-27"
+      "computed": "2026-09-28"
     },
     "HOOD": {
       "avg_abs_move": 3.809424567645723,
-      "computed": "2026-09-27"
+      "computed": "2026-09-28"
     },
     "INFQ": {
       "avg_abs_move": 3.7526402453899026,
-      "computed": "2026-09-27"
+      "computed": "2026-09-28"
     },
     "MRNA": {
       "avg_abs_move": 10.675739293104362,
-      "computed": "2026-09-27"
+      "computed": "2026-09-28"
     },
     "NBIS": {
       "avg_abs_move": 3.9693909237311593,
-      "computed": "2026-09-27"
+      "computed": "2026-09-28"
     },
     "REMX": {
       "avg_abs_move": 1.6505952823712584,
-      "computed": "2026-09-27"
+      "computed": "2026-09-28"
     },
     "SPY": {
       "avg_abs_move": 0.5057023118214732,
-      "computed": "2026-09-27"
+      "computed": "2026-09-28"
     },
     "USAR": {
       "avg_abs_move": 3.675020599364761,
-      "computed": "2026-09-27"
+      "computed": "2026-09-28"
     }
   }
 }

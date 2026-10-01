@@ -88,3 +88,4 @@ ts_utc,source,kind,asset,detail,price_at_signal,ref
 2026-09-29T05:52:44Z,price,relative_move,REMX,"moved down 5.05%, 3.1x its typical day of 1.65% (threshold 2.5x)",64.470001,
 2026-09-30T17:00:00Z,price,relative_move,GOOGL,"moved up 3.04%, 2.6x its typical day of 1.16% (threshold 2.5x)",351.859985,
 2026-10-01T19:04:14Z,price,relative_move,GOOGL,"moved down 3.13%, 2.7x its typical day of 1.16% (threshold 2.5x)",338.450012,
+2026-10-01T23:06:36Z,price,relative_move,GOOGL,"moved down 3.19%, 2.7x its typical day of 1.16% (threshold 2.5x)",338.239990,

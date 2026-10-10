@@ -97,3 +97,4 @@ ts_utc,source,kind,asset,detail,price_at_signal,ref
 2026-10-08T06:28:00Z,price,relative_move,INFQ,"moved down 7.76%, 2.6x its typical day of 2.99% (threshold 2.5x)",11.640000,
 2026-10-09T17:13:03Z,price,relative_move,MRNA,"moved up 11.32%, 3.0x its typical day of 3.78% (threshold 2.5x)",219.304993,
 2026-10-09T21:41:28Z,price,relative_move,MRNA,"moved up 14.21%, 3.8x its typical day of 3.78% (threshold 2.5x)",225.000000,
+2026-10-10T07:13:22Z,price,relative_move,MRNA,"moved up 14.21%, 3.8x its typical day of 3.78% (threshold 2.5x)",225.000000,

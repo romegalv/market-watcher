@@ -106,3 +106,4 @@ ts_utc,source,kind,asset,detail,price_at_signal,ref
 2026-10-11T17:47:26Z,price,relative_move,MRNA,"moved up 14.21%, 3.5x its typical day of 4.10% (threshold 2.5x)",225.000000,
 2026-10-12T00:28:31Z,price,relative_move,MRNA,"moved up 14.21%, 3.5x its typical day of 4.10% (threshold 2.5x)",225.000000,
 2026-10-12T06:20:46Z,price,relative_move,MRNA,"moved up 14.21%, 3.5x its typical day of 4.10% (threshold 2.5x)",225.000000,
+2026-10-12T15:45:33Z,price,relative_move,REMX,"moved down 4.54%, 3.1x its typical day of 1.46% (threshold 2.5x)",58.200001,

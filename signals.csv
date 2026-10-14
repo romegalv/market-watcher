@@ -109,3 +109,8 @@ ts_utc,source,kind,asset,detail,price_at_signal,ref
 2026-10-12T15:45:33Z,price,relative_move,REMX,"moved down 4.54%, 3.1x its typical day of 1.46% (threshold 2.5x)",58.200001,
 2026-10-12T22:37:03Z,price,relative_move,REMX,"moved down 4.58%, 3.1x its typical day of 1.46% (threshold 2.5x)",58.180000,
 2026-10-13T03:10:03Z,price,relative_move,REMX,"moved down 4.58%, 3.0x its typical day of 1.54% (threshold 2.5x)",58.180000,
+2026-10-14T19:36:04Z,price,relative_move,HOOD,"moved down 8.66%, 3.2x its typical day of 2.74% (threshold 2.5x)",100.949997,
+2026-10-14T19:36:04Z,price,relative_move,NBIS,"moved down 10.69%, 2.9x its typical day of 3.65% (threshold 2.5x)",184.750107,
+2026-10-14T19:36:04Z,price,relative_move,USAR,"moved down 9.04%, 3.4x its typical day of 2.66% (threshold 2.5x)",10.260000,
+2026-10-14T19:36:04Z,price,relative_move,INFQ,"moved down 10.40%, 3.7x its typical day of 2.78% (threshold 2.5x)",9.129900,
+2026-10-14T19:36:04Z,price,relative_move,SPY,"moved down 1.06%, 2.1x its typical day of 0.51% (threshold 2.0x)",769.340027,

@@ -118,3 +118,7 @@ ts_utc,source,kind,asset,detail,price_at_signal,ref
 2026-10-15T00:48:58Z,price,relative_move,NBIS,"moved down 10.08%, 2.8x its typical day of 3.65% (threshold 2.5x)",186.010000,
 2026-10-15T00:48:58Z,price,relative_move,USAR,"moved down 8.51%, 3.1x its typical day of 2.78% (threshold 2.5x)",10.320000,
 2026-10-15T00:48:58Z,price,relative_move,INFQ,"moved down 10.60%, 3.8x its typical day of 2.80% (threshold 2.5x)",9.110000,
+2026-10-15T05:19:26Z,price,relative_move,HOOD,"moved down 8.54%, 3.1x its typical day of 2.76% (threshold 2.5x)",101.080002,
+2026-10-15T05:19:26Z,price,relative_move,NBIS,"moved down 10.08%, 2.8x its typical day of 3.65% (threshold 2.5x)",186.009995,
+2026-10-15T05:19:26Z,price,relative_move,USAR,"moved down 8.51%, 3.1x its typical day of 2.78% (threshold 2.5x)",10.320000,
+2026-10-15T05:19:26Z,price,relative_move,INFQ,"moved down 10.60%, 3.8x its typical day of 2.80% (threshold 2.5x)",9.110000,

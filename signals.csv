@@ -141,3 +141,5 @@ ts_utc,source,kind,asset,detail,price_at_signal,ref
 2026-10-18T04:37:35Z,price,relative_move,INFQ,"moved down 10.37%, 3.0x its typical day of 3.48% (threshold 2.5x)",8.550000,
 2026-10-18T09:03:31Z,price,relative_move,NBIS,"moved down 11.27%, 2.7x its typical day of 4.15% (threshold 2.5x)",165.470001,
 2026-10-18T09:03:31Z,price,relative_move,INFQ,"moved down 10.37%, 3.0x its typical day of 3.48% (threshold 2.5x)",8.550000,
+2026-10-18T13:10:59Z,price,relative_move,NBIS,"moved down 11.27%, 2.7x its typical day of 4.15% (threshold 2.5x)",165.470001,
+2026-10-18T13:10:59Z,price,relative_move,INFQ,"moved down 10.37%, 3.0x its typical day of 3.48% (threshold 2.5x)",8.550000,

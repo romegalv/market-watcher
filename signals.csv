@@ -153,3 +153,7 @@ ts_utc,source,kind,asset,detail,price_at_signal,ref
 2026-10-22T19:26:32Z,price,relative_move,MRNA,"moved down 20.72%, 4.7x its typical day of 4.42% (threshold 2.5x)",195.179993,
 2026-10-23T00:54:26Z,price,relative_move,MRNA,"moved down 17.70%, 4.1x its typical day of 4.36% (threshold 2.5x)",202.630000,
 2026-10-23T05:35:02Z,price,relative_move,MRNA,"moved down 17.70%, 4.1x its typical day of 4.36% (threshold 2.5x)",202.630005,
+2026-10-27T18:57:43Z,price,relative_move,NBIS,"moved up 9.33%, 2.5x its typical day of 3.67% (threshold 2.5x)",170.389999,
+2026-10-27T18:57:43Z,price,relative_move,REMX,"moved up 4.11%, 2.6x its typical day of 1.55% (threshold 2.5x)",53.825001,
+2026-10-27T18:57:43Z,price,relative_move,USAR,"moved up 12.74%, 3.7x its typical day of 3.42% (threshold 2.5x)",10.068000,
+2026-10-27T18:57:43Z,price,relative_move,INFQ,"moved up 11.36%, 3.3x its typical day of 3.46% (threshold 2.5x)",9.610000,

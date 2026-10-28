@@ -157,3 +157,6 @@ ts_utc,source,kind,asset,detail,price_at_signal,ref
 2026-10-27T18:57:43Z,price,relative_move,REMX,"moved up 4.11%, 2.6x its typical day of 1.55% (threshold 2.5x)",53.825001,
 2026-10-27T18:57:43Z,price,relative_move,USAR,"moved up 12.74%, 3.7x its typical day of 3.42% (threshold 2.5x)",10.068000,
 2026-10-27T18:57:43Z,price,relative_move,INFQ,"moved up 11.36%, 3.3x its typical day of 3.46% (threshold 2.5x)",9.610000,
+2026-10-28T01:49:47Z,price,relative_move,REMX,"moved up 4.84%, 2.9x its typical day of 1.68% (threshold 2.5x)",54.200001,
+2026-10-28T01:49:47Z,price,relative_move,USAR,"moved up 16.46%, 4.2x its typical day of 3.91% (threshold 2.5x)",10.400000,
+2026-10-28T01:49:47Z,price,relative_move,INFQ,"moved up 12.86%, 3.3x its typical day of 3.87% (threshold 2.5x)",9.740000,

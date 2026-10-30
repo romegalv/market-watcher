@@ -165,3 +165,6 @@ ts_utc,source,kind,asset,detail,price_at_signal,ref
 2026-10-28T07:33:08Z,price,relative_move,INFQ,"moved up 12.86%, 3.3x its typical day of 3.87% (threshold 2.5x)",9.740000,
 2026-10-29T08:57:41Z,price,relative_move,GOOGL,"moved up 11.07%, 9.3x its typical day of 1.20% (threshold 2.5x)",324.890015,
 2026-10-30T00:24:28Z,price,pct_move,BTC,moved down 4.77% (threshold 4.0%),77248.000000,
+2026-10-30T18:15:09Z,price,relative_move,REMX,"moved down 5.54%, 3.3x its typical day of 1.66% (threshold 2.5x)",49.590000,
+2026-10-30T18:15:09Z,price,relative_move,SPY,"moved down 1.43%, 2.7x its typical day of 0.53% (threshold 2.0x)",753.804993,
+2026-10-30T18:15:09Z,price,pct_move,BTC,moved down 4.55% (threshold 4.0%),77055.000000,

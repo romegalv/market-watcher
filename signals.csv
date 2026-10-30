@@ -164,3 +164,4 @@ ts_utc,source,kind,asset,detail,price_at_signal,ref
 2026-10-28T07:33:08Z,price,relative_move,USAR,"moved up 16.46%, 4.2x its typical day of 3.91% (threshold 2.5x)",10.400000,
 2026-10-28T07:33:08Z,price,relative_move,INFQ,"moved up 12.86%, 3.3x its typical day of 3.87% (threshold 2.5x)",9.740000,
 2026-10-29T08:57:41Z,price,relative_move,GOOGL,"moved up 11.07%, 9.3x its typical day of 1.20% (threshold 2.5x)",324.890015,
+2026-10-30T00:24:28Z,price,pct_move,BTC,moved down 4.77% (threshold 4.0%),77248.000000,

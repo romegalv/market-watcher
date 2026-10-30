@@ -1,6 +1,6 @@
 {
   "last_alert": {
-    "BTC:0": "2026-09-22T06:09:25Z",
+    "BTC:0": "2026-10-30T00:24:28Z",
     "GOOGL:0": "2026-10-29T08:57:39Z",
     "HOOD:0": "2026-10-15T05:19:25Z",
     "INFQ:0": "2026-10-28T07:33:08Z",
@@ -14,35 +14,35 @@
   "volatility": {
     "GOOGL": {
       "avg_abs_move": 1.1964457558042445,
-      "computed": "2026-10-29"
+      "computed": "2026-10-30"
     },
     "HOOD": {
       "avg_abs_move": 2.660318792735994,
-      "computed": "2026-10-29"
+      "computed": "2026-10-30"
     },
     "INFQ": {
       "avg_abs_move": 3.8663152995242385,
-      "computed": "2026-10-29"
+      "computed": "2026-10-30"
     },
     "MRNA": {
       "avg_abs_move": 4.881149951508905,
-      "computed": "2026-10-29"
+      "computed": "2026-10-30"
     },
     "NBIS": {
       "avg_abs_move": 4.170948204199755,
-      "computed": "2026-10-29"
+      "computed": "2026-10-30"
     },
     "REMX": {
       "avg_abs_move": 1.6590599516500442,
-      "computed": "2026-10-29"
+      "computed": "2026-10-30"
     },
     "SPY": {
       "avg_abs_move": 0.5286491259327967,
-      "computed": "2026-10-29"
+      "computed": "2026-10-30"
     },
     "USAR": {
       "avg_abs_move": 3.8679166036969055,
-      "computed": "2026-10-29"
+      "computed": "2026-10-30"
     }
   }
 }

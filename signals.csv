@@ -188,3 +188,4 @@ ts_utc,source,kind,asset,detail,price_at_signal,ref
 2026-11-02T01:01:42Z,price,relative_move,SPY,"moved down 1.18%, 2.1x its typical day of 0.56% (threshold 2.0x)",755.719971,
 2026-11-02T07:34:30Z,price,relative_move,REMX,"moved down 4.78%, 2.6x its typical day of 1.86% (threshold 2.5x)",49.990002,
 2026-11-02T07:34:30Z,price,relative_move,SPY,"moved down 1.18%, 2.1x its typical day of 0.56% (threshold 2.0x)",755.719971,
+2026-11-02T23:57:16Z,price,relative_move,REMX,"moved down 4.68%, 2.5x its typical day of 1.86% (threshold 2.5x)",50.259998,

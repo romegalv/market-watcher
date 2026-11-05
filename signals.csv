@@ -194,3 +194,6 @@ ts_utc,source,kind,asset,detail,price_at_signal,ref
 2026-11-04T14:52:46Z,price,relative_move,SPY,"moved up 1.59%, 3.0x its typical day of 0.53% (threshold 2.0x)",766.979980,
 2026-11-04T20:58:28Z,price,relative_move,MRNA,"moved up 12.58%, 3.0x its typical day of 4.19% (threshold 2.5x)",257.350006,
 2026-11-04T20:58:28Z,price,relative_move,SPY,"moved up 1.51%, 2.8x its typical day of 0.53% (threshold 2.0x)",766.375000,
+2026-11-05T01:20:58Z,price,relative_move,MRNA,"moved up 13.03%, 3.1x its typical day of 4.19% (threshold 2.5x)",258.380000,
+2026-11-05T01:20:58Z,price,relative_move,SPY,"moved up 1.57%, 2.9x its typical day of 0.53% (threshold 2.0x)",766.810000,
+2026-11-05T01:20:58Z,price,pct_move,BTC,moved up 4.54% (threshold 4.0%),80341.000000,

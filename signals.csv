@@ -214,3 +214,4 @@ ts_utc,source,kind,asset,detail,price_at_signal,ref
 2026-11-06T02:13:01Z,price,relative_move,INFQ,"moved down 13.39%, 3.4x its typical day of 3.89% (threshold 2.5x)",7.440000,
 2026-11-06T02:13:01Z,price,relative_move,SPY,"moved down 4.44%, 7.9x its typical day of 0.56% (threshold 2.0x)",733.000000,
 2026-11-06T02:13:01Z,price,pct_move,BTC,moved down 5.80% (threshold 4.0%),76063.000000,
+2026-11-06T09:25:02Z,price,pct_move,BTC,moved down 5.15% (threshold 4.0%),76146.000000,

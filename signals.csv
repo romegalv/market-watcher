@@ -226,3 +226,5 @@ ts_utc,source,kind,asset,detail,price_at_signal,ref
 2026-11-07T14:08:01Z,price,relative_move,INFQ,"moved up 22.38%, 5.3x its typical day of 4.21% (threshold 2.5x)",8.890000,
 2026-11-07T18:43:24Z,price,relative_move,USAR,"moved up 13.60%, 3.3x its typical day of 4.16% (threshold 2.5x)",8.225000,
 2026-11-07T18:43:24Z,price,relative_move,INFQ,"moved up 22.38%, 5.3x its typical day of 4.21% (threshold 2.5x)",8.890000,
+2026-11-08T01:30:22Z,price,relative_move,USAR,"moved up 13.60%, 3.0x its typical day of 4.47% (threshold 2.5x)",8.225000,
+2026-11-08T01:30:22Z,price,relative_move,INFQ,"moved up 22.38%, 4.6x its typical day of 4.81% (threshold 2.5x)",8.890000,

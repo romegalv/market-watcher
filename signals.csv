@@ -238,3 +238,4 @@ ts_utc,source,kind,asset,detail,price_at_signal,ref
 2026-11-09T02:03:40Z,price,relative_move,INFQ,"moved up 22.38%, 4.6x its typical day of 4.81% (threshold 2.5x)",8.890000,
 2026-11-09T20:03:33Z,price,relative_move,REMX,"moved up 4.79%, 2.5x its typical day of 1.88% (threshold 2.5x)",53.860001,
 2026-11-09T20:03:33Z,price,relative_move,SPY,"moved up 2.44%, 3.5x its typical day of 0.70% (threshold 2.0x)",754.020020,
+2026-11-10T02:39:52Z,price,relative_move,SPY,"moved up 2.26%, 3.0x its typical day of 0.75% (threshold 2.0x)",752.690002,

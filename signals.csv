@@ -240,3 +240,4 @@ ts_utc,source,kind,asset,detail,price_at_signal,ref
 2026-11-09T20:03:33Z,price,relative_move,SPY,"moved up 2.44%, 3.5x its typical day of 0.70% (threshold 2.0x)",754.020020,
 2026-11-10T02:39:52Z,price,relative_move,SPY,"moved up 2.26%, 3.0x its typical day of 0.75% (threshold 2.0x)",752.690002,
 2026-11-10T18:01:48Z,price,relative_move,REMX,"moved down 5.16%, 2.7x its typical day of 1.92% (threshold 2.5x)",51.595001,
+2026-11-12T20:27:37Z,price,relative_move,NBIS,"moved down 15.46%, 2.5x its typical day of 6.14% (threshold 2.5x)",126.180000,

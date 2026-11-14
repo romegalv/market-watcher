@@ -244,3 +244,4 @@ ts_utc,source,kind,asset,detail,price_at_signal,ref
 2026-11-13T08:09:46Z,price,pct_move,BTC,moved down 6.63% (threshold 4.0%),68709.000000,
 2026-11-13T16:16:23Z,price,pct_move,BTC,moved down 4.66% (threshold 4.0%),68528.000000,
 2026-11-14T15:30:06Z,price,pct_move,BTC,moved down 4.86% (threshold 4.0%),65263.000000,
+2026-11-14T23:49:08Z,price,pct_move,BTC,moved down 6.04% (threshold 4.0%),63967.000000,

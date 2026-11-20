@@ -247,3 +247,4 @@ ts_utc,source,kind,asset,detail,price_at_signal,ref
 2026-11-14T23:49:08Z,price,pct_move,BTC,moved down 6.04% (threshold 4.0%),63967.000000,
 2026-11-19T23:13:11Z,price,relative_move,GOOGL,"moved down 4.46%, 2.6x its typical day of 1.73% (threshold 2.5x)",272.660004,
 2026-11-19T23:13:11Z,price,relative_move,SPY,"moved down 2.40%, 2.8x its typical day of 0.85% (threshold 2.0x)",715.869995,
+2026-11-20T03:58:44Z,price,relative_move,SPY,"moved down 2.40%, 2.7x its typical day of 0.90% (threshold 2.0x)",715.869995,

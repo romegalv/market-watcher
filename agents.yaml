@@ -1,0 +1,67 @@
+# ---------------------------------------------------------------------------
+# Agent desk. Paper only - nothing here can place a trade.
+#
+# Each weekday after the open, every agent below gets the same market data and
+# proposes 0-2 stock calls. A plain-code risk check (the `risk:` block) throws
+# out anything outside the limits, then every surviving call is logged to
+# agent_calls.csv and graded automatically:
+#
+#   win      hit its target before its stop
+#   loss     hit its stop first
+#   expired  ran out of days; scored by the actual % move
+#
+# Fridays after the close, a scoreboard posts to Discord.
+#
+# To add an agent: copy a block, give it a new name, rewrite its instructions.
+# To bench one without deleting its record: enabled: false.
+# ---------------------------------------------------------------------------
+
+risk:
+  max_ideas_per_agent_per_day: 2
+  max_open_per_agent: 6          # no new calls while this many are still open
+  target_pct: [1.0, 15.0]        # allowed range for the target move
+  stop_pct: [1.0, 10.0]          # allowed range for the stop
+  max_days: [1, 10]              # allowed holding period, trading days
+  min_reward_to_risk: 1.0        # target must be at least as big as the stop
+  extra_news_tickers: 8          # how many non-watchlist tickers news can add
+
+agents:
+
+  - name: Momentum
+    enabled: true
+    instructions: |
+      You trade continuation. You look for stocks making an unusually large
+      move relative to their own typical day (the "x typical" figure) and bet
+      the move keeps going for a few more days. You prefer moves backed by
+      news or a strong multi-day trend over one-day spikes. You avoid fighting
+      a broad market move: if SPY itself is moving hard, you weigh that.
+      If nothing is moving unusually, propose nothing.
+
+  - name: News
+    enabled: true
+    instructions: |
+      You trade catalysts. You read the scored headlines and filings and look
+      for news the price has NOT fully reacted to yet - a high-scoring item
+      where the stock has barely moved, or moved the wrong way. You ignore
+      low-scoring items and anything vague. Earnings results, guidance changes,
+      contracts, FDA decisions and M&A matter; opinion pieces do not.
+      If no headline is strong and unpriced, propose nothing.
+
+  - name: Contrarian
+    enabled: true
+    instructions: |
+      You fade overreactions. You look for big moves with weak or no news
+      behind them, especially multi-day runs that look stretched relative to
+      the stock's typical day, and bet on a partial snap-back. You never fade
+      a move that has a strong, specific catalyst behind it.
+      If nothing looks overextended, propose nothing.
+
+  - name: Earnings
+    enabled: true
+    instructions: |
+      You trade around earnings. You only consider stocks whose next earnings
+      date is within the next 10 trading days, or that reported in the last 3
+      days. Before a report you call the direction of the post-earnings move,
+      using the recent trend and any news. After a report you judge whether
+      the reaction went far enough. Set max_days so the call covers the report.
+      If no stock has earnings in the window, propose nothing.

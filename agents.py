@@ -205,6 +205,24 @@ def recent_signals(days: int = 3) -> list[dict]:
     return [r for r in rows if parse_ts(r["ts_utc"]) >= cutoff]
 
 
+def earnings_label(when) -> str:
+    """Turn an earnings date into words the model can't misread.
+
+    The data source sometimes returns the LAST report instead of the next one,
+    and models are bad at date arithmetic, so the code does the math.
+    """
+    day = when if not hasattr(when, "date") else when.date()
+    today = datetime.now(ET).date()
+    # Weekdays between the two dates - close enough to trading days.
+    lo, hi = sorted((today, day))
+    weekdays = sum((lo + timedelta(days=i)).weekday() < 5 for i in range(1, (hi - lo).days + 1))
+    if day == today:
+        return f"TODAY ({day})"
+    if day > today:
+        return f"in {weekdays} trading days ({day})"
+    return f"already reported {weekdays} trading days ago ({day}); next date unknown"
+
+
 def ticker_snapshot(symbol: str, vol_cache: dict) -> dict | None:
     try:
         import yfinance as yf
@@ -233,7 +251,7 @@ def ticker_snapshot(symbol: str, vol_cache: dict) -> dict | None:
             cal = tk.calendar or {}
             dates = cal.get("Earnings Date") if isinstance(cal, dict) else None
             if dates:
-                snap["next_earnings"] = str(dates[0])
+                snap["next_earnings"] = earnings_label(dates[0])
         except Exception:  # noqa: BLE001 - earnings dates are a nice-to-have
             pass
         return snap
@@ -266,7 +284,7 @@ def build_market(risk: dict) -> tuple[dict, str]:
         lines.append(
             f"{symbol}: ${s['price']} | today {s['day_pct']:+}% ({s['x_typical']}x typical "
             f"day of {s['typical_day_pct']}%) | 5d {s['5d_pct']:+}% | 20d {s['20d_pct']}% "
-            f"| next earnings {s['next_earnings'] or 'unknown'}"
+            f"| earnings: {s['next_earnings'] or 'unknown'}"
         )
     sigs = [r for r in recent_signals() if r["asset"] in universe]
     lines += ["", "PRICE ALERTS, last 3 days"]

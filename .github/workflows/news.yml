@@ -37,7 +37,8 @@ jobs:
         run: |
           git config user.name "watcher-bot"
           git config user.email "watcher-bot@users.noreply.github.com"
-          git add news_log.csv news_state.json 2>/dev/null || true
+          git add news_state.json 2>/dev/null || true
+          git add news_log.csv 2>/dev/null || true
           if git diff --staged --quiet; then
             echo "nothing new to commit"
           else

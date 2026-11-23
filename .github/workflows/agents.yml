@@ -4,7 +4,7 @@ on:
   schedule:
     # Every 30 min during US market hours (UTC). agents.py decides whether it's
     # pick time, grading time or scoreboard time, so extra runs are harmless.
-    - cron: "*/30 13-21 * * 1-5"
+  - cron: "7,37 13-21 * * 1-5"
   workflow_dispatch:
     inputs:
       test:

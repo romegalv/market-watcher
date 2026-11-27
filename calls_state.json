@@ -4,6 +4,7 @@
     "entries": {
       "SPY": 722.2899780273438
     },
-    "exited": false
+    "exited": true,
+    "exited_at": "2026-11-27T21:41:50Z"
   }
 }
